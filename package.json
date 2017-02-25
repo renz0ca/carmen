@@ -1,0 +1,28 @@
+{
+    "name": "Carmen",
+    "version": "1.0.0",
+    "description": "A better bot framework",
+    "main": "carmen.js",
+    "scripts": {
+        "start": "node carmen.js"
+    },
+    "dependencies":{
+        "discord.io": "2.4.2",
+        "cheerio": "0.22.0",
+        "tinyreq": "3.2.0",
+        "ytdl-core": "0.7.21"
+    },
+    "engines": {
+        "node": "6.2.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/renz0ca/carmen"
+    },
+    "keywords": [
+        "node",
+        "carmen",
+        "discord",
+        "bot"
+    ]
+}

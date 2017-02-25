@@ -13,7 +13,6 @@ var Crypto      = require('./crypto.js');
 
 var YELLOW         = 7458112
 var LOGGING_STRING = "carmen.js  || "
-var API_TOKEN      = ""
 
 var WELCOME_MESSAGE   = "Hey there! I'm Carmen! If you ever need anything just let me know :smile:.\n"
                       + "You can always call for `!help` if you're ever unsure of anything!"
@@ -23,18 +22,21 @@ var RECOG_WELCOME_MSG = "I remember you guys! As always, if you ever need anythi
 COMMAND_SIZE_COL = 14
 USAGE_SIZE_COL = 24
 
-// GET API TOKEN FROM ARGS
-process.argv.forEach(function (val, index, array) {
-    if(val === "-k" && index+1 < array.length) {
-        API_TOKEN = array[index+1]
-    } else if(index === array.length-1 && API_TOKEN === "") {
-        console.log("Usage: carmem.js -k API_KEY")
-        console.log("You must provide a Discord Token!")
-        process.exit()
-    }
-});
+// GET API TOKEN FROM ARGS (IF API_TOKEN ISN'T PREDEFINED)
+if (typeof API_TOKEN === 'undefined'){
+    API_TOKEN = ""
+    process.argv.forEach(function (val, index, array) {
+        if(val === "-k" && index+1 < array.length) {
+            API_TOKEN = array[index+1]
+        } else if(index === array.length-1 && API_TOKEN === "") {
+            console.log("Usage: carmem.js -k API_KEY")
+            console.log("You must provide a Discord Token!")
+            process.exit()
+        }
+    });
+}
 
-// DECLARE BOT OBJECT
+// INIT BOT OBJECT
 var bot = new Discord.Client({
     autorun: true,
     token: API_TOKEN
