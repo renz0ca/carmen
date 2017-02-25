@@ -1,1 +1,0 @@
-{"SYSTEM":{"USER_KEYS":["money"],"USER_DEF_VALUES":[0],"SERVER_KEYS":["generate_currency","server_greeting"],"SERVER_DEF_VALUES":[false,"Welcome %user%!"]},"USERS":{"180872294179143680":{"money":0},"270607991445651466":{"money":0}},"SERVERS":{"270831631407906816":{"generate_currency":false,"server_greeting":"Welcome %user%!"}}}
