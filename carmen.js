@@ -23,12 +23,12 @@ COMMAND_SIZE_COL = 14
 USAGE_SIZE_COL = 24
 
 // GET API TOKEN FROM ARGS (IF API_TOKEN ISN'T PREDEFINED)
-if (typeof API_TOKEN === 'undefined'){
-    API_TOKEN = ""
+if (typeof process.env.API_TOKEN === 'undefined'){
+    process.env.API_TOKEN = ""
     process.argv.forEach(function (val, index, array) {
         if(val === "-k" && index+1 < array.length) {
-            API_TOKEN = array[index+1]
-        } else if(index === array.length-1 && API_TOKEN === "") {
+            process.env.API_TOKEN = array[index+1]
+        } else if(index === array.length-1 && process.env.API_TOKEN === "") {
             console.log("Usage: carmem.js -k API_KEY")
             console.log("You must provide a Discord Token!")
             process.exit()
@@ -39,7 +39,7 @@ if (typeof API_TOKEN === 'undefined'){
 // INIT BOT OBJECT
 var bot = new Discord.Client({
     autorun: true,
-    token: API_TOKEN
+    token: process.env.API_TOKEN
 });
 
 
