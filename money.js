@@ -1,5 +1,8 @@
 // money.js
 
+// WEB SERVER MODULE
+var Web = require('./web.js');
+
 // GLOBALS
 var BOT                 = null
 var MEMORY              = null
@@ -42,7 +45,7 @@ module.exports = {
     init_module: function(memory, bot){
         BOT = bot 
         MEMORY = memory
-        log_event("Initizaling Money Module...")
+        log_event("Initializing Money Module...")
         MEMORY.register_server_key('generate_currency', false)
         MEMORY.register_user_key('money', 0)
         return command_dict
@@ -300,9 +303,15 @@ function get_random_int(low, high) {
 function log_event(string, newline = true, include_log_string = true){
     logging_string = ''
     if(include_log_string) logging_string = LOGGING_STRING
-    if(newline) process.stdout.write(logging_string + string + "\n")
-    else process.stdout.write(logging_string + string)
+    if(newline){
+        Web.print_web_console(logging_string + string + "\n")
+        process.stdout.write(logging_string + string + "\n")
+    } else {
+        Web.print_web_console(logging_string + string)
+        process.stdout.write(logging_string + string)
+    }
 }
+
 
 
 // Sends a formatted (embed block) to the chat containing a specified message.

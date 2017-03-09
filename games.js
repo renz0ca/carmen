@@ -1,5 +1,8 @@
 // games.js
 
+// WEB SERVER MODULE
+var Web = require('./web.js');
+
 // GLOBALS
 var BOT = null
 var LOGGING_STRING = "games.js   || "
@@ -61,7 +64,7 @@ module.exports = {
     // @return The module's command dictionary
     //
     init_module: function(bot){ 
-        log_event("Initizaling Games Module...")
+        log_event("Initializing Games Module...")
         BOT = bot
         return command_dict
     },
@@ -330,8 +333,13 @@ function get_random_int(low, high) {
 function log_event(string, newline = true, include_log_string = true){
     logging_string = ''
     if(include_log_string) logging_string = LOGGING_STRING
-    if(newline) process.stdout.write(logging_string + string + "\n")
-    else process.stdout.write(logging_string + string)
+    if(newline){
+        Web.print_web_console(logging_string + string + "\n")
+        process.stdout.write(logging_string + string + "\n")
+    } else {
+        Web.print_web_console(logging_string + string)
+        process.stdout.write(logging_string + string)
+    }
 }
 
 

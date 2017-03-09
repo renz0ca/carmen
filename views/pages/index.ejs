@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+</head>
+<body>
+    <div id="content">
+        <div id="header">
+            <span>
+                <p class="logo">Carmen</p>
+                <p class="subtitle">Administrative Terminal</p>
+                <img class="logo-img" src="logo.png">
+            </span>
+        </div>
+        <div id="container">
+            <button id="reset-api">Reset API Client</button>
+            <div id="status-box">
+                <span><p class="title">STATUS:</p></span>
+                <div class="status"></div>
+            </div>
+            <div class="textarea-container"><textarea id="console" readonly></textarea></div>
+        </div> 
+    </div>
+</body>
+</html>

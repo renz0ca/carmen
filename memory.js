@@ -1,5 +1,8 @@
 //memory.js
 
+// WEB SERVER MODULE
+var Web = require('./web.js');
+
 // IMPORTS
 var fs = require('fs');
 
@@ -305,6 +308,11 @@ function save_memory(async = false){
 function log_event(string, newline = true, include_log_string = true){
     logging_string = ''
     if(include_log_string) logging_string = LOGGING_STRING
-    if(newline) process.stdout.write(logging_string + string + "\n")
-    else process.stdout.write(logging_string + string)
+    if(newline){
+        Web.print_web_console(logging_string + string + "\n")
+        process.stdout.write(logging_string + string + "\n")
+    } else {
+        Web.print_web_console(logging_string + string)
+        process.stdout.write(logging_string + string)
+    }
 }

@@ -1,5 +1,8 @@
 // twitter.js
 
+// WEB SERVER MODULE
+var Web = require('./web.js');
+
 // IMPORTS
 var cheerio = require("cheerio")
 var request = require("tinyreq")
@@ -38,7 +41,7 @@ module.exports = {
     // @param BOT The bot being used.
     //
     init_module: function(bot){ 
-        log_event("Initizaling Twitter Module...")
+        log_event("Initializing Twitter Module...")
         BOT = bot 
     },
     
@@ -308,6 +311,11 @@ function parse_transmit_error(error){
 function log_event(string, newline = true, include_log_string = true){
     logging_string = ''
     if(include_log_string) logging_string = LOGGING_STRING
-    if(newline) process.stdout.write(logging_string + string + "\n")
-    else process.stdout.write(logging_string + string)
+    if(newline){
+        Web.print_web_console(logging_string + string + "\n")
+        process.stdout.write(logging_string + string + "\n")
+    } else {
+        Web.print_web_console(logging_string + string)
+        process.stdout.write(logging_string + string)
+    }
 }

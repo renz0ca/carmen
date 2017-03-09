@@ -11,12 +11,18 @@ var Memory      = require('./memory.js');
 var Money       = require('./money.js');
 var Crypto      = require('./crypto.js');
 
+// WEB SERVER MODULE
+var Web         = require('./web.js');
+
+//GLOBALS
 var YELLOW         = 7458112
 var LOGGING_STRING = "carmen.js  || "
 
 var WELCOME_MESSAGE   = "Hey there! I'm Carmen! If you ever need anything just let me know :smile:.\n"
                       + "You can always call for `!help` if you're ever unsure of anything!"
 var RECOG_WELCOME_MSG = "I remember you guys! As always, if you ever need anything just call for `!help`!"
+
+var HARD_RESET_CYCLE = false;
 
 // HELP CONSTANTS
 COMMAND_SIZE_COL = 14
@@ -42,35 +48,54 @@ var bot = new Discord.Client({
     token: process.env.API_TOKEN
 });
 
+// 0.) ---- WEB INTERFACE --------------------------------------------------------------------------- //
+
+Web.launch_webserver(bot)
 
 // 1.) ---- BOT EVENTS ------------------------------------------------------------------------------ //
 
 
 // BOT ON READY
 //
+FIRST_LAUNCH = true
 bot.on('ready', function(event) {
     log_event('Logged in as ' + bot.username + ' - ' + bot.id);
-    // Register Modules
-    Memory.init_module(bot)
-    register_commands(Games.init_module(bot))
-    Twitter.init_module(bot)
-    register_commands(Money.init_module(Memory, bot))
-    register_commands(Crypto.init_module(bot))
-    // Memory Registrations
-    Memory.register_server_key("server_greeting", "Welcome %user%!")
+    if(FIRST_LAUNCH) {
+        // Register Modules
+        Memory.init_module(bot)
+        register_commands(Games.init_module(bot))
+        Twitter.init_module(bot)
+        register_commands(Money.init_module(Memory, bot))
+        register_commands(Crypto.init_module(bot))
+        // Memory Registrations
+        Memory.register_server_key("server_greeting", "Welcome %user%!")
+        // BOT ON NEW SERVER
+        bot.on('guildCreate', function(guild, server){
+            log_event("New Server Detected...")
+            is_new_server = Memory.add_server(guild)
+            if(is_new_server) bot.sendMessage({ to: guild['id'], message: WELCOME_MESSAGE })
+            // If currently in a restart cycle, don't print RECOG Welcome.
+            else if(!HARD_RESET_CYCLE) {
+                bot.sendMessage({ to: guild['id'], message: RECOG_WELCOME_MSG })
+            }
+        });
+    }
+    // Flips off HARD_RESET_CYCLE var if it was on.
+    HARD_RESET_CYCLE = false;
     // Process Active Servers
     log_event("Processing Active Servers...")
     Memory.process_new_servers(bot['servers'], true)
-    // BOT ON NEW SERVER
-    bot.on('guildCreate', function(guild, server){
-        log_event("New Server Detected...")
-        is_new_server = Memory.add_server(guild)
-        if(is_new_server) bot.sendMessage({ to: guild['id'], message: WELCOME_MESSAGE })
-        else bot.sendMessage({ to: guild['id'], message: RECOG_WELCOME_MSG })
-    });
+    FIRST_LAUNCH = false;
     log_event('Ready.')
 });
 
+
+// BOT ON DISCONNECT
+//
+bot.on('disconnect', function(errMsg, code) {
+    HARD_RESET_CYCLE = true;
+    bot.connect()
+});
 
 // BOT ON MESSAGE
 //
@@ -405,8 +430,13 @@ function register_commands(ext_command_dict){
 function log_event(string, newline = true, include_log_string = true){
     logging_string = ''
     if(include_log_string) logging_string = LOGGING_STRING
-    if(newline) process.stdout.write(logging_string + string + "\n")
-    else process.stdout.write(logging_string + string)
+    if(newline){
+        Web.print_web_console(logging_string + string + "\n")
+        process.stdout.write(logging_string + string + "\n")
+    } else {
+        Web.print_web_console(logging_string + string)
+        process.stdout.write(logging_string + string)
+    }
 }
 
 
